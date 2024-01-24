@@ -1,30 +1,43 @@
-import { GET_MUSIC, SET_QUERY } from "../actions";
+import { GET_MUSIC, SET_QUERY, SET_SELECTED_ALBUM, SET_SELECTED_ID } from "../actions";
 
 const initialState = {
-    searchResult: [],
-    query: "metallica"
-}
+  searchResult: [],
+  query: "metallica",
+  selectedId: "",
+  selectedAlbum: null
+};
 export const musicReducer = (state = initialState, action) => {
-    // ritornare la nuova "versione" dello state, partendo da una copia
-    /* 
+  // ritornare la nuova "versione" dello state, partendo da una copia
+  /* 
         {
             type: "",
             payload: {}   
         }
 
     */
-    switch(action.type) {
-        case GET_MUSIC: 
-        // dopo la fetch, salva i dati nello stato
-            return {
-                ...state, 
-                searchResult: action.payload
-            }
-        case SET_QUERY: 
-            return {
-                ...state,
-                query: action.payload
-            }
-        default: return state;
-    }
-}
+  switch (action.type) {
+    case GET_MUSIC:
+      // dopo la fetch, salva i dati nello stato
+      return {
+        ...state,
+        searchResult: action.payload,
+      };
+    case SET_QUERY:
+      return {
+        ...state,
+        query: action.payload,
+      };
+    case SET_SELECTED_ID:
+      return {
+        ...state,
+        selectedId: action.payload,
+      };
+    case SET_SELECTED_ALBUM: 
+      return {
+        ...state, 
+        selectedAlbum: action.payload
+      }
+    default:
+      return state;
+  }
+};

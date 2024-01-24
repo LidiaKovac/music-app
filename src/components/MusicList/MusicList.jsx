@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ADD_FAV, GET_MUSIC, REMOVE_FAV } from "../../redux/actions";
+import {
+  ADD_FAV,
+  GET_MUSIC,
+  REMOVE_FAV,
+  SET_SELECTED_ID,
+  getAlbumAsyncAction,
+  getMusicAsyncAction,
+} from "../../redux/actions";
 import { Button, Card, Col, Row } from "react-bootstrap";
 
 export const MusicList = () => {
@@ -9,25 +16,15 @@ export const MusicList = () => {
   const query = useSelector((state) => state.music.query);
   const favs = useSelector((state) => state.favs.data);
   useEffect(() => {
-    fetch("https://striveschool-api.herokuapp.com/api/deezer/search?q=" + query)
-      .then((raw) => {
-        return raw.json();
-      })
-      .then((res) => {
-        console.log(res.data);
-        // setMusic(res.data);
-        dispatch({
-          type: GET_MUSIC,
-          payload: res.data,
-        });
-      });
+    dispatch(getMusicAsyncAction());
   }, [query]);
+
   const handleFavs = (id) => {
-    if(favs.includes(id)) {
+    if (favs.includes(id)) {
       dispatch({
         type: REMOVE_FAV,
-        payload: id
-      })
+        payload: id,
+      });
     } else {
       dispatch({
         type: ADD_FAV,
@@ -35,6 +32,13 @@ export const MusicList = () => {
       });
     }
   };
+  const handleSelect = (albumId) => {
+    dispatch({
+      type: SET_SELECTED_ID,
+       payload: albumId
+    })
+    dispatch(getAlbumAsyncAction())
+  }
   return (
     <>
       <Row>
@@ -54,6 +58,9 @@ export const MusicList = () => {
                     ? "Rimuovi album dai prefe"
                     : "Aggiungi album ai prefe"}
                 </Button>
+                <Button onClick={() => {
+                  handleSelect(song.album.id)
+                }}>Vedi dettagli</Button>
               </Card.Body>
             </Card>{" "}
           </Col>

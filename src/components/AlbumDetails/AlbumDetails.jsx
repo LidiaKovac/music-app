@@ -1,10 +1,15 @@
 import { useSelector } from "react-redux";
+import Loading from "../Loading/Loading";
 
 export const AlbumDetails = () => {
   const album = useSelector((state) => state.music.selectedAlbum);
+  const error = useSelector(state => state.errors.status)
+  const isLoading = useSelector((state) => state.music.loading);
   return (
     <>
-      {!album ? (
+      {isLoading && !error ? (
+        <Loading />
+      ) : !album ? (
         "No album selected"
       ) : (
         <div>

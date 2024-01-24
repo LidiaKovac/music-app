@@ -9,12 +9,15 @@ import {
   getMusicAsyncAction,
 } from "../../redux/actions";
 import { Button, Card, Col, Row } from "react-bootstrap";
+import Loading from "../Loading/Loading";
 
 export const MusicList = () => {
   const dispatch = useDispatch();
   const music = useSelector((state) => state.music.searchResult);
   const query = useSelector((state) => state.music.query);
   const favs = useSelector((state) => state.favs.data);
+  const error = useSelector(state => state.errors.status)
+  const isLoading = useSelector(state => state.music.loading)
   useEffect(() => {
     dispatch(getMusicAsyncAction());
   }, [query]);
@@ -35,12 +38,13 @@ export const MusicList = () => {
   const handleSelect = (albumId) => {
     dispatch({
       type: SET_SELECTED_ID,
-       payload: albumId
-    })
-    dispatch(getAlbumAsyncAction())
-  }
+      payload: albumId,
+    });
+    dispatch(getAlbumAsyncAction());
+  };
   return (
     <>
+      {isLoading && !error ? <Loading /> : 
       <Row>
         {music.map((song) => (
           <Col lg={3}>
@@ -58,14 +62,18 @@ export const MusicList = () => {
                     ? "Rimuovi album dai prefe"
                     : "Aggiungi album ai prefe"}
                 </Button>
-                <Button onClick={() => {
-                  handleSelect(song.album.id)
-                }}>Vedi dettagli</Button>
+                <Button
+                  onClick={() => {
+                    handleSelect(song.album.id);
+                  }}
+                >
+                  Vedi dettagli
+                </Button>
               </Card.Body>
             </Card>{" "}
           </Col>
         ))}
-      </Row>
+      </Row>}
     </>
   );
 };

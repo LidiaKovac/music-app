@@ -16,11 +16,10 @@ const persistedReducer = persistReducer(
   {
     key: "root",
     storage,
-    whitelist: ["favs"]
+    whitelist: ["favs"],
   },
   rootReducer
 );
-
 
 const store = configureStore({
   reducer: persistedReducer,
